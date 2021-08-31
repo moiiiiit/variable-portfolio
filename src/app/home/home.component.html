@@ -7,7 +7,7 @@
         <p class="medium negativepadding alttextcolor">Welcome to my portfolio!</p>
         <p  [style.font-size]="isMobile ? '2rem' : '3rem'" class="giant end">{{userprofile.homehellointro}}</p>
     </div>
-    <img *ngIf="userprofile!=null" src="assets/images/{{userprofile?.homeprofilepiclink}}" class='coder' />
+    <img *ngIf="userprofile!=null" src="{{userprofile?.homeprofilepiclink}}" class='coder' />
 </div>
 
 <div class="bottompadding">

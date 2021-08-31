@@ -1,8 +1,17 @@
 <nb-layout center>
     <nb-layout-header fixed withScroll class="main-navbar">
-        <div class="header-container hidden-print">
+        <div class="header-container">
             <div class="logo-container">
-                <nb-user *ngIf="userprofile!=null" class='user-profile' name={{userprofile?.name}} title={{userprofile?.maintitle}}></nb-user>
+                <div class="horizontal">
+                    <input #autoInput nbInput type="text" (input)="onChange()" placeholder="Enter a name"
+                        [nbAutocomplete]="auto" />
+                    <nb-autocomplete #auto (selectedChange)="onSelectionChange($event)">
+                        <nb-option *ngFor="let option of filteredOptions$ | async" [value]="option">
+                            {{ option }}
+                        </nb-option>
+                    </nb-autocomplete>
+                    <button nbButton class="horizontalpadding" (click)="setUserName()">Go</button>
+                </div>
             </div>
         </div>
 
@@ -13,7 +22,7 @@
 
     <nb-layout-column>
         <ng-container #menucontainer></ng-container>
-        <router-outlet></router-outlet>
+            <router-outlet></router-outlet>
     </nb-layout-column>
 
 </nb-layout>

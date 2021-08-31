@@ -5,7 +5,6 @@
 nb-action {
   height: auto;
   display: flex;
-  align-content: center;
 }
 .header-container {
   display: flex;
@@ -29,11 +28,6 @@ nb-layout {
 ::ng-deep nb-action {
   cursor: pointer;
 }
-@media print {
-  nb-layout-header {
-    display: none !important;
-  }
-  ::ng-deep nb-card-header {
-    display: none;
-  }
+.horizontalpadding{
+  margin-left: 0.5rem;
 }

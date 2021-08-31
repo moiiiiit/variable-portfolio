@@ -1,16 +1,19 @@
-import { ServerRequests } from './ServerRequests';
+import { GlobalConstants } from './GLOBAL-VARIABLES';
+import { Observable, of } from 'rxjs';
+import { map } from 'rxjs/operators';
 import {
   ChangeDetectionStrategy,
   Component,
   ViewChild,
   ViewContainerRef,
   ComponentFactoryResolver,
-  ElementRef,
-  ComponentFactory,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { HostListener } from '@angular/core';
 import { MenuComponent } from './menu/menu.component';
 import { ActionsComponent } from './actions/actions.component';
+import { Router } from '@angular/router';
+import { SpinnerService } from './spinner/spinner.service';
 
 @Component({
   selector: 'app-root',
@@ -20,6 +23,9 @@ import { ActionsComponent } from './actions/actions.component';
 })
 export class AppComponent {
   userprofile = null;
+  options: ['Mohit Bhole', 'Dummy User'];
+  filteredOptions$: Observable<string[]>;
+  tempusername = 'Mohit Bhole';
   componentRef = null;
   componentRef2 = null;
   title = 'Mohit Bhole';
@@ -34,22 +40,14 @@ export class AppComponent {
   entry2!: ViewContainerRef;
   constructor(
     private resolver: ComponentFactoryResolver,
-    private server: ServerRequests
+    private cdf: ChangeDetectorRef,
+    private router: Router,
+    private spinnerService: SpinnerService
   ) {}
-
+  @ViewChild('autoInput') input;
   ngOnInit(): void {
-    // this.server.getProfile('Mohit Bhole').subscribe((data) => {
-    //   this.server.profile = data;
-    // });
-    // this.server.getExperiences(this.server.profile.userid).subscribe((data) => {
-    //   this.server.experiences = data;
-    // });
-    // this.server.getIdentifiers(this.server.profile.userid).subscribe((data) => {
-    //   this.server.identifiers = data;
-    // });
-    // this.server.getProjects(this.server.profile.userid).subscribe((data) => {
-    //   this.server.projects = data;
-    // });
+    this.options = ['Mohit Bhole', 'Dummy User'];
+    this.filteredOptions$ = of(this.options);
   }
 
   ngAfterViewInit() {
@@ -77,6 +75,17 @@ export class AppComponent {
     //console.log(this.screenheight/this.screenwidth); //1.02
   }
 
+  setUserName() {
+    GlobalConstants.username = this.tempusername;
+    this.spinnerService.requestStarted();
+    console.log(GlobalConstants.username);
+    this.cdf.detectChanges();
+    this.router.navigateByUrl('/contact', { skipLocationChange: true }).then(() => {
+      this.router.navigate(['home']);
+    this.spinnerService.requestCompleted();
+  }); 
+  }
+
   createComponent(): void {
     const factory = this.resolver.resolveComponentFactory(MenuComponent);
     this.componentRef = this.entry.createComponent(factory);
@@ -85,5 +94,30 @@ export class AppComponent {
   createActionComponent(): void {
     const factory = this.resolver.resolveComponentFactory(ActionsComponent);
     this.componentRef2 = this.entry2.createComponent(factory);
+  }
+
+  private filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.options.filter((optionValue) =>
+      optionValue.toLowerCase().includes(filterValue)
+    );
+  }
+
+  getFilteredOptions(value: string): Observable<string[]> {
+    return of(value).pipe(map((filterString) => this.filter(filterString)));
+  }
+
+  onChange() {
+    this.filteredOptions$ = this.getFilteredOptions(
+      this.input.nativeElement.value
+    );
+    this.tempusername = this.input.nativeElement.value;
+    console.log(this.tempusername);
+  }
+
+  onSelectionChange($event) {
+    this.filteredOptions$ = this.getFilteredOptions($event);
+    this.tempusername = this.input.nativeElement.value;
+    console.log(this.tempusername);
   }
 }

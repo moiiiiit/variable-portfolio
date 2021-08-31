@@ -1,3 +1,5 @@
+import { GlobalConstants } from './../GLOBAL-VARIABLES';
+import { AppComponent } from './../app.component';
 import { ServerRequests } from './../ServerRequests';
 import { Component, OnInit } from '@angular/core';
 import { HostListener, ChangeDetectorRef } from '@angular/core';
@@ -22,7 +24,7 @@ export class AboutComponent implements OnInit {
   }
 
   getProfileData() {
-    this.server.getUserID('Mohit Bhole').subscribe((data) => {
+    this.server.getUserID(GlobalConstants.username).subscribe((data) => {
       this.userid = data;
       this.server.getProfile(this.userid).subscribe((data) => {
         this.userprofile = data;

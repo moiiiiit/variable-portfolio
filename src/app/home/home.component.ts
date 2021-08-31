@@ -1,3 +1,4 @@
+import { GlobalConstants } from './../GLOBAL-VARIABLES';
 import { ServerRequests } from './../ServerRequests';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import Typewriter from 't-writer.js';
@@ -70,7 +71,7 @@ export class HomeComponent implements OnInit {
   }
 
   getProfileData() {
-    this.server.getUserID('Mohit Bhole').subscribe((data) => {
+    this.server.getUserID(GlobalConstants.username).subscribe((data) => {
       this.userid = data;
       this.server.getProfile(this.userid).subscribe((data) => {
         this.userprofile = data;

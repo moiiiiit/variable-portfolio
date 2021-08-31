@@ -16,6 +16,8 @@ import {
   NbActionsModule,
   NbButtonModule,
   NbSpinnerModule,
+  NbAutocompleteModule,
+  NbInputModule,
 } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { ResumeComponent } from './resume/resume.component';
@@ -50,6 +52,7 @@ import { httpInterceptProvider } from './http_interceptor';
   imports: [
     SafePipeModule,
     BrowserModule,
+    NbAutocompleteModule,
     HttpClientModule,
     AppRoutingModule,
     BrowserAnimationsModule,
@@ -71,6 +74,7 @@ import { httpInterceptProvider } from './http_interceptor';
     NbButtonModule,
     NbSpinnerModule,
     NbIconModule,
+    NbInputModule,
     NbUserModule,
     NbMenuModule,
     NbMenuModule.forRoot(),
