@@ -1,3 +1,4 @@
+import { ServerRequests } from './ServerRequests';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -10,7 +11,6 @@ import {
 import { HostListener } from '@angular/core';
 import { MenuComponent } from './menu/menu.component';
 import { ActionsComponent } from './actions/actions.component';
-import * as data from 'src/assets/userprofile.json';
 
 @Component({
   selector: 'app-root',
@@ -26,13 +26,30 @@ export class AppComponent {
   theme = '';
   screenheight = 0;
   screenwidth = 0;
+  loading = true;
 
-  @ViewChild('menucontainer', { read: ViewContainerRef }) entry!: ViewContainerRef;
-  @ViewChild('actionscontainer', { read: ViewContainerRef }) entry2!: ViewContainerRef;
+  @ViewChild('menucontainer', { read: ViewContainerRef })
+  entry!: ViewContainerRef;
+  @ViewChild('actionscontainer', { read: ViewContainerRef })
+  entry2!: ViewContainerRef;
   constructor(
-    private resolver: ComponentFactoryResolver
-  ) {
-    this.userprofile = data;
+    private resolver: ComponentFactoryResolver,
+    private server: ServerRequests
+  ) {}
+
+  ngOnInit(): void {
+    // this.server.getProfile('Mohit Bhole').subscribe((data) => {
+    //   this.server.profile = data;
+    // });
+    // this.server.getExperiences(this.server.profile.userid).subscribe((data) => {
+    //   this.server.experiences = data;
+    // });
+    // this.server.getIdentifiers(this.server.profile.userid).subscribe((data) => {
+    //   this.server.identifiers = data;
+    // });
+    // this.server.getProjects(this.server.profile.userid).subscribe((data) => {
+    //   this.server.projects = data;
+    // });
   }
 
   ngAfterViewInit() {

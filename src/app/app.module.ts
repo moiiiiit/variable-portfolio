@@ -1,8 +1,10 @@
+import { ServerRequests } from './ServerRequests';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
   NbCardModule,
@@ -13,6 +15,7 @@ import {
   NbLayoutModule,
   NbActionsModule,
   NbButtonModule,
+  NbSpinnerModule,
 } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { ResumeComponent } from './resume/resume.component';
@@ -26,6 +29,8 @@ import { ReactportfolioComponent } from './reactportfolio/reactportfolio.compone
 import { LinkedinComponent } from './linkedin/linkedin.component';
 import { GithubComponent } from './github/github.component';
 import { EmailComponent } from './email/email.component';
+import { SpinnerComponent } from './spinner/spinner.component';
+import { httpInterceptProvider } from './http_interceptor';
 
 @NgModule({
   declarations: [
@@ -40,10 +45,12 @@ import { EmailComponent } from './email/email.component';
     LinkedinComponent,
     GithubComponent,
     EmailComponent,
+    SpinnerComponent,
   ],
   imports: [
     SafePipeModule,
     BrowserModule,
+    HttpClientModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     NbLayoutModule,
@@ -62,13 +69,14 @@ import { EmailComponent } from './email/email.component';
     ]),
     NbActionsModule,
     NbButtonModule,
+    NbSpinnerModule,
     NbIconModule,
     NbUserModule,
     NbMenuModule,
     NbMenuModule.forRoot(),
     NbThemeModule.forRoot({ name: 'dark' }),
   ],
-  providers: [],
+  providers: [ServerRequests, httpInterceptProvider],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

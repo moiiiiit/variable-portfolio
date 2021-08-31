@@ -1,5 +1,5 @@
+import { ServerRequests } from './../ServerRequests';
 import { Component, OnInit } from '@angular/core';
-import * as data from 'src/assets/userprofile.json';
 import { HostListener, ChangeDetectorRef } from '@angular/core';
 
 @Component({
@@ -10,15 +10,27 @@ import { HostListener, ChangeDetectorRef } from '@angular/core';
 export class AboutComponent implements OnInit {
   userprofile = null;
   aspectRatio = 16/9;
+  userid=null;
   isMobile = false;
-  constructor(private changeDetectorRef: ChangeDetectorRef) {
-    this.userprofile = data;
+  constructor(private changeDetectorRef: ChangeDetectorRef, private server: ServerRequests) {
     this.aspectRatio = window.innerHeight / window.innerWidth;
     if (this.aspectRatio > 1.716) {
       this.isMobile = true;
     } else {
       this.isMobile = false;
     }
+  }
+
+  getProfileData() {
+    this.server.getUserID('Mohit Bhole').subscribe((data) => {
+      this.userid = data;
+      this.server.getProfile(this.userid).subscribe((data) => {
+        this.userprofile = data;
+      });
+    });
+  }
+  ngOnInit(): void {
+    this.getProfileData();
   }
   
   @HostListener('window:resize', ['$event'])
@@ -31,8 +43,6 @@ export class AboutComponent implements OnInit {
       this.isMobile = false;
       this.changeDetectorRef.detectChanges();
     }
-  }
-  ngOnInit(): void {
   }
 
 }

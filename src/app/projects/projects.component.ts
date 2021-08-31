@@ -1,3 +1,4 @@
+import { ServerRequests } from './../ServerRequests';
 import { Component, OnInit,
 } from '@angular/core';
 import * as data from 'src/assets/userprofile.json';
@@ -11,15 +12,11 @@ import { HostListener, ChangeDetectorRef } from '@angular/core';
 export class ProjectsComponent implements OnInit {
   userprofile = null;
   aspectRatio = 16/9;
+  userid = null;
   isMobile = false;
-  hideme=[]
-  hidemeimg=[]
-  constructor(private changeDetectorRef: ChangeDetectorRef) {
+  userprojects=null;
+  constructor(private changeDetectorRef: ChangeDetectorRef, private server: ServerRequests) {
     this.userprofile = data;
-    for(let i=0;i<this.userprofile.projects.length;i++){
-      this.hideme[i] = this.userprofile.projects[i].hasOwnProperty('medialink') ? 1 : 0
-      this.hidemeimg[i] = this.userprofile.projects[i].hasOwnProperty('imglink') ? 1 : 0
-    }
     this.aspectRatio = window.innerHeight / window.innerWidth;
     if (this.aspectRatio > 1.716) {
       this.isMobile = true;
@@ -38,8 +35,20 @@ export class ProjectsComponent implements OnInit {
       this.changeDetectorRef.detectChanges();
     }
   }
+  getProfileData() {
+    this.server.getUserID('Mohit Bhole').subscribe((data) => {
+      this.userid = data;
+      this.server.getProfile(this.userid).subscribe((data) => {
+        this.userprofile = data;
+        this.server.getProjects(this.userid).subscribe((data) => {
+          this.userprojects = data;
+          this.changeDetectorRef.detectChanges();
+        });
+      });
+    });
+  }
   ngOnInit(): void {
-    console.log(this.hideme)
+    this.getProfileData();
   }
 
 }

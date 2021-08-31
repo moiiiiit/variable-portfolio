@@ -1,3 +1,4 @@
+import { ServerRequests } from './../ServerRequests';
 import { Component, OnInit } from '@angular/core';
 import * as data from 'src/assets/userprofile.json';
 import { HostListener, ChangeDetectorRef } from '@angular/core';
@@ -12,7 +13,11 @@ export class ResumeComponent implements OnInit {
   aspectRatio = 16 / 9;
   isMobile = false;
   resumeurl = '';
-  constructor(private changeDetectorRef: ChangeDetectorRef) {
+  userid = null;
+  constructor(
+    private changeDetectorRef: ChangeDetectorRef,
+    private server: ServerRequests
+  ) {
     this.userprofile = data;
     this.resumeurl = this.userprofile.resumeiframesrc;
     this.aspectRatio = window.innerHeight / window.innerWidth;
@@ -34,5 +39,15 @@ export class ResumeComponent implements OnInit {
       this.changeDetectorRef.detectChanges();
     }
   }
-  ngOnInit(): void {}
+  getProfileData() {
+    this.server.getUserID('Mohit Bhole').subscribe((data) => {
+      this.userid = data;
+      this.server.getProfile(this.userid).subscribe((data) => {
+        this.userprofile = data;
+      });
+    });
+  }
+  ngOnInit(): void {
+    this.getProfileData();
+  }
 }

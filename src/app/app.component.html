@@ -2,7 +2,7 @@
     <nb-layout-header fixed withScroll class="main-navbar">
         <div class="header-container hidden-print">
             <div class="logo-container">
-                <nb-user class='user-profile' name={{userprofile.name}} title={{userprofile.maintitle}}></nb-user>
+                <nb-user *ngIf="userprofile!=null" class='user-profile' name={{userprofile?.name}} title={{userprofile?.maintitle}}></nb-user>
             </div>
         </div>
 
@@ -17,3 +17,5 @@
     </nb-layout-column>
 
 </nb-layout>
+
+<app-spinner></app-spinner>
